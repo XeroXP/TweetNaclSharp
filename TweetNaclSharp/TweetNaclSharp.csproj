@@ -12,7 +12,7 @@ to C#.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/XeroXP/TweetNaclSharp.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>tweetnacl, nacl</PackageTags>
+    <PackageTags>tweetnacl, nacl, cryptography, encryption, secretbox, cryptobox</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
