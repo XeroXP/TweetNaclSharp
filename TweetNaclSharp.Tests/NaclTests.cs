@@ -7,6 +7,7 @@ using TweetNaclSharp.Util;
 
 namespace TweetNaclSharp.Tests
 {
+    [TestFixture, Category("Nacl")]
     public class NaclTests
     {
         [SetUp]

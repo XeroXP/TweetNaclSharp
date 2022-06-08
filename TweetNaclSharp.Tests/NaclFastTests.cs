@@ -8,6 +8,7 @@ using TweetNaclSharp.Util;
 
 namespace TweetNaclFastSharp.Tests
 {
+    [TestFixture, Category("NaclFast")]
     public class NaclFastTests
     {
         [SetUp]
