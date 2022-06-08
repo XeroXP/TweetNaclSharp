@@ -297,6 +297,17 @@ it runs on:
 
 * `System.Security.Cryptography.RandomNumberGenerator` (standard)
 
+If you somehow have a cryptographically-strong source of entropy
+(not `Math.Random`!), and you know what you are doing, you can plug it into
+TweetNaclSharp like this:
+
+    TweetNaclSharp.Nacl.SetPRNG((byte[] x, int n) => {
+      // ... copy n random bytes into x ...
+    });
+
+Note that `TweetNaclSharp.Nacl.SetPRNG` *completely replaces* internal random byte generator
+with the one provided.
+
 
 ### Constant-time comparison
 

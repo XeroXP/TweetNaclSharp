@@ -1,12 +1,12 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using TweetNaclSharp;
 using TweetNaclSharp.Core;
 using TweetNaclSharp.Core.Extensions;
 using TweetNaclSharp.Tests.Data;
 using TweetNaclSharp.Util;
 
-namespace TweetNaclFastSharp.Tests
+namespace TweetNaclSharp.Tests
 {
     [TestFixture, Category("NaclFast")]
     public class NaclFastTests
@@ -53,7 +53,8 @@ namespace TweetNaclFastSharp.Tests
         public void NaclFastCryptoOnetimeauthSpecifiedVectors()
         {
             var outp = new byte[16];
-            OnetimeauthSpec.Data.ForEach(v => {
+            OnetimeauthSpec.Data.ForEach(v =>
+            {
                 NaclFast.CryptoOnetimeauth(outp, 0, v.M, 0, v.M.Length, v.K);
                 Assert.AreEqual(NaclUtil.EncodeBase64(outp), NaclUtil.EncodeBase64(v.Outp));
             });
@@ -63,7 +64,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastSecretboxRandomTestVectors()
         {
-            SecretboxRandom.Data.ForEach(vec => {
+            SecretboxRandom.Data.ForEach(vec =>
+            {
                 var key = NaclUtil.DecodeBase64(vec[0]);
                 var nonce = NaclUtil.DecodeBase64(vec[1]);
                 var msg = NaclUtil.DecodeBase64(vec[2]);
@@ -83,9 +85,10 @@ namespace TweetNaclFastSharp.Tests
         public void NaclFastSecretboxAndNaclFastSecretboxOpen()
         {
             var key = new byte[NaclFast.SecretboxKeyLength];
+            Console.WriteLine(NaclFast.SecretboxNonceLength);
             var nonce = new byte[NaclFast.SecretboxNonceLength];
             for (var i = 0; i < key.Length; i++) key[i] = (byte)(i & 0xff);
-            for (var i = 0; i < nonce.Length; i++) nonce[i] = (byte)((32 + i) & 0xff);
+            for (var i = 0; i < nonce.Length; i++) nonce[i] = (byte)(32 + i & 0xff);
             var msg = NaclUtil.DecodeUTF8("message to encrypt");
             var box = NaclFast.Secretbox(msg, nonce, key);
             var openedMsg = NaclFast.SecretboxOpen(box, nonce, key);
@@ -175,7 +178,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastScalarmultAndNaclFastScalarmultBaseRandomTestVectors()
         {
-            ScalarmultRandom.Data.ForEach(vec => {
+            ScalarmultRandom.Data.ForEach(vec =>
+            {
                 var pk1 = NaclUtil.DecodeBase64(vec[0]);
                 var sk1 = NaclUtil.DecodeBase64(vec[1]);
                 var pk2 = NaclUtil.DecodeBase64(vec[2]);
@@ -199,7 +203,8 @@ namespace TweetNaclFastSharp.Tests
         public void NaclFastBoxRandomTestVectors()
         {
             var nonce = new byte[NaclFast.BoxNonceLength];
-            BoxRandom.Data.ForEach(vec => {
+            BoxRandom.Data.ForEach(vec =>
+            {
                 var pk1 = NaclUtil.DecodeBase64(vec[0]);
                 var sk2 = NaclUtil.DecodeBase64(vec[1]);
                 var msg = NaclUtil.DecodeBase64(vec[2]);
@@ -242,7 +247,7 @@ namespace TweetNaclFastSharp.Tests
             var clientKeys = NaclFast.BoxKeyPair();
             var serverKeys = NaclFast.BoxKeyPair();
             var nonce = new byte[NaclFast.BoxNonceLength];
-            for (var i = 0; i < nonce.Length; i++) nonce[i] = (byte)((32 + i) & 0xff);
+            for (var i = 0; i < nonce.Length; i++) nonce[i] = (byte)(32 + i & 0xff);
             var msg = NaclUtil.DecodeUTF8("message to encrypt");
             var clientBox = NaclFast.Box(msg, nonce, serverKeys.PublicKey, clientKeys.SecretKey);
             var clientMsg = NaclFast.BoxOpen(clientBox, nonce, clientKeys.PublicKey, serverKeys.SecretKey);
@@ -308,7 +313,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastHashRandomTestVectors()
         {
-            HashRandom.Data.ForEach(vec => {
+            HashRandom.Data.ForEach(vec =>
+            {
                 var msg = NaclUtil.DecodeBase64(vec[0]);
                 var goodHash = NaclUtil.DecodeBase64(vec[1]);
                 var hash = NaclFast.Hash(msg);
@@ -330,7 +336,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastHashSpecifiedTestVectors()
         {
-            HashSpec.Data.ForEach(vec => {
+            HashSpec.Data.ForEach(vec =>
+            {
                 var goodHash = vec[0];
                 var msg = vec[1];
                 var hash = NaclFast.Hash(msg);
@@ -343,7 +350,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastSignAndNaclFastSignOpenSpecifiedVectors()
         {
-            SignSpec.Data.ForEach(vec => {
+            SignSpec.Data.ForEach(vec =>
+            {
                 var keys = NaclFast.SignKeyPairFromSecretKey(NaclUtil.DecodeBase64(vec[0]));
                 var msg = NaclUtil.DecodeBase64(vec[1]);
                 var goodSig = NaclUtil.DecodeBase64(vec[2]);
@@ -360,7 +368,8 @@ namespace TweetNaclFastSharp.Tests
         [Test]
         public void NaclFastSignDetachedAndNaclFastSignDetachedVerifySomeSpecifieVectors()
         {
-            for (var i = 0; i < SignSpec.Data.Count; i++) {
+            for (var i = 0; i < SignSpec.Data.Count; i++)
+            {
                 var vec = SignSpec.Data[i];
                 // We don't need to test all, as internals are already tested above.
                 if (i % 100 != 0) return;

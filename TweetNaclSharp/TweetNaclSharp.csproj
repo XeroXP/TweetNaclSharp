@@ -5,8 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Authors>XeroXP</Authors>
-    <Description>Port of TweetNaCl (http://tweetnacl.cr.yp.to) / NaCl (http://nacl.cr.yp.to/)
-to C#.</Description>
+    <Description>Port of TweetNaCl (http://tweetnacl.cr.yp.to) / NaCl (http://nacl.cr.yp.to/) to C#.</Description>
     <Copyright>Copyright (c) $(Authors) 2022</Copyright>
     <PackageProjectUrl>https://github.com/XeroXP/TweetNaclSharp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,6 +15,7 @@ to C#.</Description>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
