@@ -57,12 +57,12 @@ You can install TweetNaclSharp via a package manager:
 
     $ Install-Package TweetNaclSharp
 
-or [download source code](/XeroXP/TweetNaclSharp/releases).
+or [download source code](../../releases).
 
 
 Examples
 --------
-You can find usage examples in our [wiki](/XeroXP/TweetNaclSharp/wiki/Examples).
+You can find usage examples in our [wiki](../../wiki/Examples).
 
 
 Usage
