@@ -3,6 +3,7 @@ TweetNaclSharp
 
 ![](https://img.shields.io/nuget/v/TweetNaclSharp)
 ![](https://img.shields.io/nuget/dt/TweetNaclSharp?color=laim)
+![](https://img.shields.io/appveyor/build/XeroXP/tweetnaclsharp/master)
 ![](https://img.shields.io/appveyor/tests/XeroXP/tweetnaclsharp/master)
 
 Port of [TweetNaCl](http://tweetnacl.cr.yp.to) / [NaCl](http://nacl.cr.yp.to/)
@@ -56,12 +57,12 @@ You can install TweetNaclSharp via a package manager:
 
     $ Install-Package TweetNaclSharp
 
-or [download source code](https://github.com/XeroXP/TweetNaclSharp/releases).
+or [download source code](/XeroXP/TweetNaclSharp/releases).
 
 
 Examples
 --------
-You can find usage examples in our [wiki](https://github.com/dchest/XeroXP/TweetNaclSharp/Examples).
+You can find usage examples in our [wiki](/XeroXP/TweetNaclSharp/wiki/Examples).
 
 
 Usage
