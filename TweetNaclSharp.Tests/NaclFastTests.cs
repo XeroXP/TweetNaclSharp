@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using TweetNaclSharp.Core;
 using TweetNaclSharp.Core.Extensions;
@@ -85,7 +84,6 @@ namespace TweetNaclSharp.Tests
         public void NaclFastSecretboxAndNaclFastSecretboxOpen()
         {
             var key = new byte[NaclFast.SecretboxKeyLength];
-            Console.WriteLine(NaclFast.SecretboxNonceLength);
             var nonce = new byte[NaclFast.SecretboxNonceLength];
             for (var i = 0; i < key.Length; i++) key[i] = (byte)(i & 0xff);
             for (var i = 0; i < nonce.Length; i++) nonce[i] = (byte)(32 + i & 0xff);
