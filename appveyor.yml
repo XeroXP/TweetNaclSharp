@@ -15,7 +15,4 @@ build:
 
 test:
   assemblies:
-    - '**\*.Test.dll'
-artifacts:  
-- path: '**\*.nupkg'
-  name: NuGet
+    - '**\*.Tests.dll'

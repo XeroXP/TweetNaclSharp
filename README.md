@@ -1,6 +1,10 @@
 TweetNaclSharp
 ============
 
+![](https://img.shields.io/nuget/v/TweetNaclSharp)
+![](https://img.shields.io/nuget/dt/TweetNaclSharp?color=laim)
+![](https://img.shields.io/appveyor/tests/XeroXP/tweetnaclsharp/master)
+
 Port of [TweetNaCl](http://tweetnacl.cr.yp.to) / [NaCl](http://nacl.cr.yp.to/)
 to C#. Public domain.
 
