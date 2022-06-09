@@ -14,7 +14,6 @@ Documentation
 =============
 
 * [Overview](#overview)
-* [Audits](#audits)
 * [Installation](#installation)
 * [Examples](#examples)
 * [Usage](#usage)
@@ -27,9 +26,7 @@ Documentation
   * [Constant-time comparison](#constant-time-comparison)
 * [System requirements](#system-requirements)
 * [Development and testing](#development-and-testing)
-* [Benchmarks](#benchmarks)
 * [Contributors](#contributors)
-* [Who uses it](#who-uses-it)
 
 
 Overview
@@ -70,7 +67,7 @@ Usage
 
 All API functions accept and return bytes as `byte[]`s.  If you need to
 encode or decode strings, use functions from
-`TweetNacl.NaclUtil` or one of the more robust codec
+`TweetNaclSharp.NaclUtil` or one of the more robust codec
 packages.
 
 
@@ -298,7 +295,7 @@ it runs on:
 * `System.Security.Cryptography.RandomNumberGenerator` (standard)
 
 If you somehow have a cryptographically-strong source of entropy
-(not `Math.Random`!), and you know what you are doing, you can plug it into
+(not `Random`!), and you know what you are doing, you can plug it into
 TweetNaclSharp like this:
 
     TweetNaclSharp.Nacl.SetPRNG((byte[] x, int n) => {
@@ -326,3 +323,21 @@ System requirements
 TweetNaclSharp supports:
 
 * Net 6
+
+
+Development and testing
+------------------------
+
+Make sure to rebuild projects every time you change code for testing.
+
+### Testing
+
+To run tests:
+
+    $ dotnet test
+
+
+Contributors
+------------
+
+[XeroXP](../../../).
