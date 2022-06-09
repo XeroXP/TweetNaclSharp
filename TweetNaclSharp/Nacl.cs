@@ -19,10 +19,6 @@ namespace TweetNaclSharp
             return r;
         }
 
-        /// <summary>
-        /// generate number of random bytes equal to array size.
-        /// </summary>
-        /// <param name="d">generated random byte</param>
         private static Action<byte[], int> randomBytes = (byte[] d, int n) =>
         {
             using (var rng = RandomNumberGenerator.Create())
@@ -536,12 +532,6 @@ namespace TweetNaclSharp
             for (var a = 0; a < 16; a++) o[a] = c[a];
         }
 
-        /// <summary>
-        /// Scalar multiplication is a curve25519 implementation.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="p"></param>
-        /// <returns>the resulting group element q of length SCALARMULT_byteS.</returns>
         private static int CryptoScalarmult(byte[] q, byte[] n, byte[] p)
         {
             byte[] z = new byte[32];
@@ -1119,6 +1109,11 @@ namespace TweetNaclSharp
             if (sk.Length != crypto_box_SECRETKEYBYTES) throw new NaclException("bad secret key size");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns>A byte[] of the given length containing random bytes of cryptographic quality.</returns>
         public static byte[] RandomBytes(int n)
         {
             var b = new byte[n];
@@ -1126,6 +1121,13 @@ namespace TweetNaclSharp
             return b;
         }
 
+        /// <summary>
+        /// Encrypts and authenticates message using the key and the nonce. The nonce must be unique for each distinct message for this key.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="nonce"></param>
+        /// <param name="key"></param>
+        /// <returns>An encrypted and authenticated message, which is TweetNaclSharp.Nacl.SecretboxOverheadLength longer than the original message.</returns>
         public static byte[] Secretbox(byte[] msg, byte[] nonce, byte[] key)
         {
             CheckLengths(key, nonce);
@@ -1136,6 +1138,13 @@ namespace TweetNaclSharp
             return c.SubArray(crypto_secretbox_BOXZEROBYTES);
         }
 
+        /// <summary>
+        /// Authenticates and decrypts the given secret box using the key and the nonce.
+        /// </summary>
+        /// <param name="box"></param>
+        /// <param name="nonce"></param>
+        /// <param name="key"></param>
+        /// <returns>The original message, or null if authentication fails.</returns>
         public static byte[]? SecretboxOpen(byte[] box, byte[] nonce, byte[] key)
         {
             CheckLengths(key, nonce);
@@ -1147,10 +1156,26 @@ namespace TweetNaclSharp
             return m.SubArray(crypto_secretbox_ZEROBYTES);
         }
 
+        /// <summary>
+        /// Length of key in bytes.
+        /// </summary>
         public static readonly int SecretboxKeyLength = crypto_secretbox_KEYBYTES;
+        /// <summary>
+        /// Length of nonce in bytes.
+        /// </summary>
         public static readonly int SecretboxNonceLength = crypto_secretbox_NONCEBYTES;
+        /// <summary>
+        /// Length of overhead added to secret box compared to original message.
+        /// </summary>
         public static readonly int SecretboxOverheadLength = crypto_secretbox_BOXZEROBYTES;
 
+        /// <summary>
+        /// Multiplies an integer n by a group element p.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="p"></param>
+        /// <returns>The resulting group element.</returns>
+        /// <exception cref="NaclException"></exception>
         public static byte[] ScalarMult(byte[] n, byte[] p)
         {
             if (n.Length != crypto_scalarmult_SCALARBYTES) throw new NaclException("bad n size");
@@ -1160,6 +1185,12 @@ namespace TweetNaclSharp
             return q;
         }
 
+        /// <summary>
+        /// Multiplies an integer n by a standard group element.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns>The resulting group element.</returns>
+        /// <exception cref="NaclException"></exception>
         public static byte[] ScalarMultBase(byte[] n)
         {
             if (n.Length != crypto_scalarmult_SCALARBYTES) throw new NaclException("bad n size");
@@ -1168,15 +1199,35 @@ namespace TweetNaclSharp
             return q;
         }
 
+        /// <summary>
+        /// Length of scalar in bytes.
+        /// </summary>
         public static readonly int ScalarMultScalarLength = crypto_scalarmult_SCALARBYTES;
+        /// <summary>
+        /// Length of group element in bytes.
+        /// </summary>
         public static readonly int ScalarMultGroupElementLength = crypto_scalarmult_BYTES;
 
+        /// <summary>
+        /// Encrypts and authenticates message using peer's public key, our secret key, and the given nonce, which must be unique for each distinct message for a key pair.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="nonce"></param>
+        /// <param name="publicKey"></param>
+        /// <param name="secretKey"></param>
+        /// <returns>An encrypted and authenticated message, which is TweetNaclSharp.Nacl.BoxOverheadLength longer than the original message.</returns>
         public static byte[] Box(byte[] msg, byte[] nonce, byte[] publicKey, byte[] secretKey)
         {
             var k = BoxBefore(publicKey, secretKey);
             return Secretbox(msg, nonce, k);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <param name="secretKey"></param>
+        /// <returns>A precomputed shared key which can be used in TweetNaclSharp.Nacl.BoxAfter and TweetNaclSharp.Nacl.BoxOpenAfter.</returns>
         public static byte[] BoxBefore(byte[] publicKey, byte[] secretKey)
         {
             CheckBoxLengths(publicKey, secretKey);
@@ -1185,16 +1236,42 @@ namespace TweetNaclSharp
             return k;
         }
 
+        /// <summary>
+        /// Same as TweetNaclSharp.Nacl.Box, but uses a shared key precomputed with TweetNaclSharp.Nacl.BoxBefore.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="nonce"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static byte[] BoxAfter(byte[] msg, byte[] nonce, byte[] key) => Secretbox(msg, nonce, key);
 
+        /// <summary>
+        /// Authenticates and decrypts the given box with peer's public key, our secret key, and the given nonce.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="nonce"></param>
+        /// <param name="publicKey"></param>
+        /// <param name="secretKey"></param>
+        /// <returns>The original message, or null if authentication fails.</returns>
         public static byte[]? BoxOpen(byte[] msg, byte[] nonce, byte[] publicKey, byte[] secretKey)
         {
             var k = BoxBefore(publicKey, secretKey);
             return SecretboxOpen(msg, nonce, k);
         }
 
+        /// <summary>
+        /// Same as TweetNaclSharp.Nacl.BoxOpen, but uses a shared key precomputed with TweetNaclSharp.Nacl.BoxBefore.
+        /// </summary>
+        /// <param name="box"></param>
+        /// <param name="nonce"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static byte[]? BoxOpenAfter(byte[] box, byte[] nonce, byte[] key) => SecretboxOpen(box, nonce, key);
 
+        /// <summary>
+        /// Generates a new random key pair for box.
+        /// </summary>
+        /// <returns>Key pair as an object with PublicKey and SecretKey member.</returns>
         public static KeyPair BoxKeyPair()
         {
             var pk = new byte[crypto_box_PUBLICKEYBYTES];
@@ -1203,6 +1280,12 @@ namespace TweetNaclSharp
             return new KeyPair { PublicKey = pk, SecretKey = sk };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="secretKey"></param>
+        /// <returns>A key pair for box with public key corresponding to the given secret key.</returns>
+        /// <exception cref="NaclException"></exception>
         public static KeyPair BoxKeyPairFromSecretKey(byte[] secretKey)
         {
             if (secretKey.Length != crypto_box_SECRETKEYBYTES)
@@ -1212,12 +1295,34 @@ namespace TweetNaclSharp
             return new KeyPair { PublicKey = pk, SecretKey = secretKey };
         }
 
+        /// <summary>
+        /// Length of public key in bytes.
+        /// </summary>
         public static readonly int BoxPublicKeyLength = crypto_box_PUBLICKEYBYTES;
+        /// <summary>
+        /// Length of secret key in bytes.
+        /// </summary>
         public static readonly int BoxSecretKeyLength = crypto_box_SECRETKEYBYTES;
+        /// <summary>
+        /// Length of precomputed shared key in bytes.
+        /// </summary>
         public static readonly int BoxSharedKeyLength = crypto_box_BEFORENMBYTES;
+        /// <summary>
+        /// Length of nonce in bytes.
+        /// </summary>
         public static readonly int BoxNonceLength = crypto_box_NONCEBYTES;
+        /// <summary>
+        /// Length of overhead added to box compared to original message.
+        /// </summary>
         public static readonly int BoxOverheadLength = SecretboxOverheadLength;
 
+        /// <summary>
+        /// Signs the message using the secret key.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="secretKey"></param>
+        /// <returns>A signed message.</returns>
+        /// <exception cref="NaclException"></exception>
         public static byte[] Sign(byte[] msg, byte[] secretKey)
         {
             if (secretKey.Length != crypto_sign_SECRETKEYBYTES)
@@ -1227,6 +1332,13 @@ namespace TweetNaclSharp
             return signedMsg;
         }
 
+        /// <summary>
+        /// Verifies the signed message.
+        /// </summary>
+        /// <param name="signedMsg"></param>
+        /// <param name="publicKey"></param>
+        /// <returns>The message without signature or null if verification failed.</returns>
+        /// <exception cref="NaclException"></exception>
         public static byte[]? SignOpen(byte[] signedMsg, byte[] publicKey)
         {
             if (publicKey.Length != crypto_sign_PUBLICKEYBYTES)
@@ -1239,6 +1351,12 @@ namespace TweetNaclSharp
             return m;
         }
 
+        /// <summary>
+        /// Signs the message using the secret key.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="secretKey"></param>
+        /// <returns>A signature.</returns>
         public static byte[] SignDetached(byte[] msg, byte[] secretKey)
         {
             var signedMsg = Sign(msg, secretKey);
@@ -1247,6 +1365,14 @@ namespace TweetNaclSharp
             return sig;
         }
 
+        /// <summary>
+        /// Verifies the signature for the message.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="sig"></param>
+        /// <param name="publicKey"></param>
+        /// <returns>True if verification succeeded or false if it failed.</returns>
+        /// <exception cref="NaclException"></exception>
         public static bool SignDetachedVerify(byte[] msg, byte[] sig, byte[] publicKey)
         {
             if (sig.Length != crypto_sign_BYTES)
@@ -1261,6 +1387,10 @@ namespace TweetNaclSharp
             return (CryptoSignOpen(m, sm, sm.Length, publicKey) >= 0);
         }
 
+        /// <summary>
+        /// Generates new random key pair for signing.
+        /// </summary>
+        /// <returns>Key pair as an object with PublicKey and SecretKey members.</returns>
         public static KeyPair SignKeyPair()
         {
             var pk = new byte[crypto_sign_PUBLICKEYBYTES];
@@ -1269,6 +1399,12 @@ namespace TweetNaclSharp
             return new KeyPair { PublicKey = pk, SecretKey = sk };
         }
 
+        /// <summary>
+        /// The secret key must have been generated by TweetNaclSharp.Nacl.SignKeyPair or TweetNaclSharp.Nacl.SignKeyPairFromSeed.
+        /// </summary>
+        /// <param name="secretKey"></param>
+        /// <returns>A signing key pair with public key corresponding to the given 64-byte secret key.</returns>
+        /// <exception cref="NaclException"></exception>
         public static KeyPair SignKeyPairFromSecretKey(byte[] secretKey)
         {
             if (secretKey.Length != crypto_sign_SECRETKEYBYTES)
@@ -1278,6 +1414,12 @@ namespace TweetNaclSharp
             return new KeyPair { PublicKey = pk, SecretKey = secretKey };
         }
 
+        /// <summary>
+        /// The seed must contain enough entropy to be secure. This method is not recommended for general use: instead, use TweetNaclSharp.Nacl.SignKeyPair to generate a new key pair from a random seed.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns>A new signing key pair generated deterministically from a 32-byte seed.</returns>
+        /// <exception cref="NaclException"></exception>
         public static KeyPair SignKeyPairFromSeed(byte[] seed)
         {
             if (seed.Length != crypto_sign_SEEDBYTES)
@@ -1289,11 +1431,28 @@ namespace TweetNaclSharp
             return new KeyPair { PublicKey = pk, SecretKey = sk };
         }
 
+        /// <summary>
+        /// Length of signing public key in bytes.
+        /// </summary>
         public static readonly int SignPublicKeyLength = crypto_sign_PUBLICKEYBYTES;
+        /// <summary>
+        /// Length of signing secret key in bytes.
+        /// </summary>
         public static readonly int SignSecretKeyLength = crypto_sign_SECRETKEYBYTES;
+        /// <summary>
+        /// Length of seed for TweetNaclSharp.Nacl.SignKeyPairFromSeed in bytes.
+        /// </summary>
         public static readonly int SignSeedLength = crypto_sign_SEEDBYTES;
+        /// <summary>
+        /// Length of signature in bytes.
+        /// </summary>
         public static readonly int SignSignatureLength = crypto_sign_BYTES;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns>SHA-512 hash of the message.</returns>
         public static byte[] Hash(byte[] msg)
         {
             var h = new byte[crypto_hash_BYTES];
@@ -1301,8 +1460,17 @@ namespace TweetNaclSharp
             return h;
         }
 
+        /// <summary>
+        /// Length of hash in bytes.
+        /// </summary>
         public static readonly int HashHashLength = crypto_hash_BYTES;
 
+        /// <summary>
+        /// Compares x and y in constant time.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>True if their lengths are non-zero and equal, and their contents are equal. False if either of the arguments has zero length, or arguments have different lengths, or their contents differ.</returns>
         public static bool Verify(byte[] x, byte[] y)
         {
             // Zero length arguments are considered not equal.
@@ -1311,6 +1479,10 @@ namespace TweetNaclSharp
             return (Vn(x, 0, y, 0, (uint)x.Length) == 0) ? true : false;
         }
 
+        /// <summary>
+        /// Completely replaces internal random byte generator with the one provided.
+        /// </summary>
+        /// <param name="randomBytesFunc"></param>
         public static void SetPRNG(Action<byte[], int> randomBytesFunc)
         {
             randomBytes = randomBytesFunc;
