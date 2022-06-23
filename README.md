@@ -48,11 +48,15 @@ There are two versions, you can use either of them:
 Installation
 ------------
 
-You can install TweetNaclSharp via a package manager:
+You can install TweetNaclSharp via [NuGet](https://www.nuget.org/):
 
-[NuGet](https://www.nuget.org/):
+package manager:
 
-    $ Install-Package TweetNaclSharp
+    $ PM> Install-Package TweetNaclSharp
+
+NET CLI:
+
+	$ dotnet add package TweetNaclSharp
 
 or [download source code](../../releases).
 
